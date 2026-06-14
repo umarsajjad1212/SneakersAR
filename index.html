@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Product Intelligence</title>
 
-<script type="module"
-src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-</script>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -30,157 +28,97 @@ color:#00f7ff;
 model-viewer{
 width:100vw;
 height:100vh;
-background:
-radial-gradient(circle at center,
-rgba(0,247,255,.08),
-transparent 40%);
+background:#02060b;
 }
-
-/* HUD */
 
 .hud{
 position:absolute;
-left:25px;
-top:50%;
-transform:translateY(-50%);
-width:320px;
-padding:18px;
-background:rgba(0,0,0,.35);
+top:15px;
+left:15px;
+width:260px;
+padding:15px;
+background:rgba(0,0,0,.45);
 border:1px solid rgba(0,247,255,.4);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(8px);
 z-index:100;
 }
 
-.hud:before{
-content:"";
-position:absolute;
-top:-1px;
-left:-1px;
-width:40px;
-height:40px;
-border-top:2px solid #00f7ff;
-border-left:2px solid #00f7ff;
-}
-
-.hud:after{
-content:"";
-position:absolute;
-bottom:-1px;
-right:-1px;
-width:40px;
-height:40px;
-border-bottom:2px solid #00f7ff;
-border-right:2px solid #00f7ff;
-}
-
 .title{
-font-size:18px;
-letter-spacing:3px;
-margin-bottom:15px;
+font-size:16px;
+letter-spacing:2px;
 color:white;
+margin-bottom:12px;
 }
 
 #typing{
-font-size:13px;
+font-size:12px;
 line-height:1.8;
 white-space:pre-line;
-min-height:180px;
 }
 
-.rec{
-margin-top:12px;
-padding-top:12px;
+.recommendation{
+margin-top:10px;
+padding-top:10px;
 border-top:1px solid rgba(0,247,255,.25);
 }
 
-.rec-value{
-font-size:24px;
-margin-top:4px;
-color:#00f7ff;
+.rec{
+font-size:22px;
+font-weight:700;
 text-shadow:0 0 15px #00f7ff;
 }
 
-/* SCAN LINE */
-
-.scan{
-position:absolute;
-left:0;
-width:100%;
-height:2px;
-background:#00f7ff;
-box-shadow:
-0 0 10px #00f7ff,
-0 0 25px #00f7ff;
-animation:scan 4s linear infinite;
-pointer-events:none;
-z-index:50;
-}
-
-@keyframes scan{
-0%{top:0;}
-100%{top:100%;}
-}
-
-/* STATUS */
-
 .status{
 position:absolute;
-top:20px;
-right:20px;
-padding:10px 14px;
+top:15px;
+right:15px;
+padding:8px 12px;
 border:1px solid rgba(0,247,255,.4);
 background:rgba(0,0,0,.35);
-font-size:11px;
+font-size:10px;
 letter-spacing:2px;
 z-index:100;
 }
 
-/* RADAR */
-
 .radar{
 position:absolute;
-bottom:25px;
-right:25px;
-width:120px;
-height:120px;
-border:1px solid rgba(0,247,255,.4);
+bottom:20px;
+right:20px;
+width:70px;
+height:70px;
+border:1px solid rgba(0,247,255,.5);
 border-radius:50%;
-animation:rotate 8s linear infinite;
+animation:spin 6s linear infinite;
 z-index:100;
 }
 
-.radar::before{
+.radar:before{
 content:"";
 position:absolute;
 left:50%;
 top:50%;
 width:2px;
-height:50px;
+height:30px;
 background:#00f7ff;
 transform-origin:bottom center;
 }
 
-@keyframes rotate{
+@keyframes spin{
 from{transform:rotate(0deg);}
 to{transform:rotate(360deg);}
 }
 
-@media(max-width:768px){
-
-.hud{
-left:10px;
-right:10px;
-width:auto;
-top:auto;
+#arButton{
+position:absolute;
 bottom:20px;
-transform:none;
-}
-
-.radar{
-width:80px;
-height:80px;
-}
-
+left:50%;
+transform:translateX(-50%);
+padding:12px 20px;
+border:none;
+background:#00f7ff;
+font-weight:bold;
+cursor:pointer;
+z-index:200;
 }
 
 </style>
@@ -189,30 +127,21 @@ height:80px;
 <body>
 
 <model-viewer
+id="viewer"
 src="Sneakers.glb"
 camera-controls
 auto-rotate
 shadow-intensity="1"
 ar
-ar-modes="webxr scene-viewer quick-look">
+ar-modes="scene-viewer webxr quick-look"
+camera-orbit="0deg 75deg 105%"
+field-of-view="30deg">
 
-<button slot="ar-button"
-style="
-position:absolute;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-padding:12px 22px;
-background:#00f7ff;
-border:none;
-cursor:pointer;
-font-weight:bold;">
+<button slot="ar-button" id="arButton">
 VIEW IN AR
 </button>
 
 </model-viewer>
-
-<div class="scan"></div>
 
 <div class="status">
 SYSTEM ONLINE
@@ -226,9 +155,9 @@ PRODUCT INTELLIGENCE
 
 <div id="typing"></div>
 
-<div class="rec">
-<div>Recommendation</div>
-<div class="rec-value">HIGH</div>
+<div class="recommendation">
+Recommendation
+<div class="rec">HIGH</div>
 </div>
 
 </div>
@@ -238,33 +167,22 @@ PRODUCT INTELLIGENCE
 <script>
 
 const text = `
-> PRODUCT DETECTED
-
 Product : Sneakers
-Color   : Black
-Size    : 7, 8, 9, 10
-Status  : Available
-
-> ANALYSIS COMPLETE
+Color : Black
+Size : 7, 8, 9, 10
+Status : Available
 `;
 
 let i = 0;
 
 function typeEffect(){
-
-const target =
-document.getElementById("typing");
+const target = document.getElementById("typing");
 
 if(i < text.length){
-
 target.innerHTML += text.charAt(i);
-
 i++;
-
-setTimeout(typeEffect,18);
-
+setTimeout(typeEffect,15);
 }
-
 }
 
 window.onload = typeEffect;
