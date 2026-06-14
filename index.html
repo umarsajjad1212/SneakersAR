@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Product Intelligence</title>
+
+<script type="module"
+src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#02060b;
+font-family:'Orbitron',sans-serif;
+overflow:hidden;
+color:#00f7ff;
+}
+
+model-viewer{
+width:100vw;
+height:100vh;
+background:
+radial-gradient(circle at center,
+rgba(0,247,255,.08),
+transparent 40%);
+}
+
+/* HUD */
+
+.hud{
+position:absolute;
+left:25px;
+top:50%;
+transform:translateY(-50%);
+width:320px;
+padding:18px;
+background:rgba(0,0,0,.35);
+border:1px solid rgba(0,247,255,.4);
+backdrop-filter:blur(12px);
+z-index:100;
+}
+
+.hud:before{
+content:"";
+position:absolute;
+top:-1px;
+left:-1px;
+width:40px;
+height:40px;
+border-top:2px solid #00f7ff;
+border-left:2px solid #00f7ff;
+}
+
+.hud:after{
+content:"";
+position:absolute;
+bottom:-1px;
+right:-1px;
+width:40px;
+height:40px;
+border-bottom:2px solid #00f7ff;
+border-right:2px solid #00f7ff;
+}
+
+.title{
+font-size:18px;
+letter-spacing:3px;
+margin-bottom:15px;
+color:white;
+}
+
+#typing{
+font-size:13px;
+line-height:1.8;
+white-space:pre-line;
+min-height:180px;
+}
+
+.rec{
+margin-top:12px;
+padding-top:12px;
+border-top:1px solid rgba(0,247,255,.25);
+}
+
+.rec-value{
+font-size:24px;
+margin-top:4px;
+color:#00f7ff;
+text-shadow:0 0 15px #00f7ff;
+}
+
+/* SCAN LINE */
+
+.scan{
+position:absolute;
+left:0;
+width:100%;
+height:2px;
+background:#00f7ff;
+box-shadow:
+0 0 10px #00f7ff,
+0 0 25px #00f7ff;
+animation:scan 4s linear infinite;
+pointer-events:none;
+z-index:50;
+}
+
+@keyframes scan{
+0%{top:0;}
+100%{top:100%;}
+}
+
+/* STATUS */
+
+.status{
+position:absolute;
+top:20px;
+right:20px;
+padding:10px 14px;
+border:1px solid rgba(0,247,255,.4);
+background:rgba(0,0,0,.35);
+font-size:11px;
+letter-spacing:2px;
+z-index:100;
+}
+
+/* RADAR */
+
+.radar{
+position:absolute;
+bottom:25px;
+right:25px;
+width:120px;
+height:120px;
+border:1px solid rgba(0,247,255,.4);
+border-radius:50%;
+animation:rotate 8s linear infinite;
+z-index:100;
+}
+
+.radar::before{
+content:"";
+position:absolute;
+left:50%;
+top:50%;
+width:2px;
+height:50px;
+background:#00f7ff;
+transform-origin:bottom center;
+}
+
+@keyframes rotate{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
+@media(max-width:768px){
+
+.hud{
+left:10px;
+right:10px;
+width:auto;
+top:auto;
+bottom:20px;
+transform:none;
+}
+
+.radar{
+width:80px;
+height:80px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<model-viewer
+src="Sneakers.glb"
+camera-controls
+auto-rotate
+shadow-intensity="1"
+ar
+ar-modes="webxr scene-viewer quick-look">
+
+<button slot="ar-button"
+style="
+position:absolute;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+padding:12px 22px;
+background:#00f7ff;
+border:none;
+cursor:pointer;
+font-weight:bold;">
+VIEW IN AR
+</button>
+
+</model-viewer>
+
+<div class="scan"></div>
+
+<div class="status">
+SYSTEM ONLINE
+</div>
+
+<div class="hud">
+
+<div class="title">
+PRODUCT INTELLIGENCE
+</div>
+
+<div id="typing"></div>
+
+<div class="rec">
+<div>Recommendation</div>
+<div class="rec-value">HIGH</div>
+</div>
+
+</div>
+
+<div class="radar"></div>
+
+<script>
+
+const text = `
+> PRODUCT DETECTED
+
+Product : Sneakers
+Color   : Black
+Size    : 7, 8, 9, 10
+Status  : Available
+
+> ANALYSIS COMPLETE
+`;
+
+let i = 0;
+
+function typeEffect(){
+
+const target =
+document.getElementById("typing");
+
+if(i < text.length){
+
+target.innerHTML += text.charAt(i);
+
+i++;
+
+setTimeout(typeEffect,18);
+
+}
+
+}
+
+window.onload = typeEffect;
+
+</script>
+
+</body>
+</html>
